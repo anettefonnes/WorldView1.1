@@ -11,12 +11,18 @@
 <script type="text/javascript" src="bower_components/signalr/jquery.signalR.min.js"></script>
 <script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 
-<body ng-app="WorldView">
-
-    <worldview camera world > </worldview>
+<body  ng-app="EventHandler" >
+    <div ng-controller="WorldCtrl"></div>
+    <div ng-controller="EventCtrl"></div>
+    <worldview camera>  </worldview>
 
 </body>
 
 
-<script type="text/javascript" src="AngularWorldView.js"></script>
+<script type="text/javascript" src="WorldView.js"></script>
+<script type="text/javascript" src="EventHandler.js"></script>
+<script type="text/javascript" src="WorldHandler.js"></script>
+<script type="text/javascript" src="GeolocationParser.js"></script>
+<script type="text/javascript" src="FigureCreator.js"></script>
+<script type="text/javascript" src="modules/LoginModule.js"></script>
 </html>
