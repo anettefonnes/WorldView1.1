@@ -24,7 +24,7 @@ LoginModule.factory('Token', ['Events', function (Events) {
                     lo: i,
                     la: i
                 });
-
+                i++;
                 console.log(prelead);
             });
             connection.start().fail(function (err) {
