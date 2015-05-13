@@ -4,31 +4,36 @@
 "user strict";
 //Services and controllers connected to login
 
-var LoginModule = angular.module('Login', []);
+var LoginModule = angular.module('Login', ['EventHandler']);
 
-
-
-LoginModule.factory('Token', function(){
+LoginModule.factory('Token', ['Events', function (Events) {
     return {
         access: "",
-        connectToHub: function(){
+        connectToHub: function () {
             var connection = $.hubConnection('http://wtnews.cloudapp.net:8080');
             var preleadHub = connection.createHubProxy('preleadHub');
 
             connection.qs = {Bearer: this.access};
             connection.logging = true;
-
+            var i = 1;
             preleadHub.on('onNewPrelead', function (prelead) {
-                //Do the magic
+
+                console.log("has geoloc! adding event");
+                Events.add({
+                    id: i,
+                    lo: i,
+                    la: i
+                });
+
                 console.log(prelead);
             });
-            connection.start().fail(function(err){
+            connection.start().fail(function (err) {
                 console.log(err);
             });
         }
     }; // Returns Token Object - for connecting
-});
-LoginModule.factory('Login', function(){
+}]);
+LoginModule.factory('Login', function () {
     return {
         url: "http://wtnews.cloudapp.net:8080/idsrv/connect/token",
         username: "arnor",
@@ -36,11 +41,11 @@ LoginModule.factory('Login', function(){
         client_id: 'internalServerApp'
     }
 });
-LoginModule.controller('LoginCtrl', function($http, Login, Token){
+LoginModule.controller('LoginCtrl', ['$http', 'Login', 'Token', function ($http, Login, Token) {
     console.log("Logging in with username: " + Login.username);
     $http({
         method: 'POST',
-        url: Login.url ,
+        url: Login.url,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
@@ -50,12 +55,12 @@ LoginModule.controller('LoginCtrl', function($http, Login, Token){
         '&client_id=' + Login.client_id +
         '&client_secret=H3mm3lig' +
         '&scope=write'
-    }).then(function(data) {
+    }).then(function (data) {
         Token.access = data.data.access_token;
-        if(Token.access) {
+        if (Token.access) {
             console.log("Login Success!");
             Token.connectToHub();
         }
     });
-});
+}]);
 

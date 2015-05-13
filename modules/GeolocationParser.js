@@ -1,7 +1,7 @@
 /**
  * Created by h139418 on 12.05.2015.
  */
-"use stric;"
+"use strict;"
 
 var parser = angular.module('GeoParser', []);
 

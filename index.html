@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>World View</title>
-    <link rel="stylesheet" type="text/css" href="WorldViewStyle.css">
+    <link rel="stylesheet" type="text/css" href="modules/WorldViewStyle.css">
 </head>
 <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="bower_components/threejs/build/three.min.js"></script>
@@ -11,18 +11,19 @@
 <script type="text/javascript" src="bower_components/signalr/jquery.signalR.min.js"></script>
 <script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 
-<body  ng-app="EventHandler" >
-    <div ng-controller="WorldCtrl"></div>
-    <div ng-controller="EventCtrl"></div>
-    <worldview camera>  </worldview>
+<body  ng-app="WorldHandler">
+
+    <worldview camera>
+        <div ng-controller="WorldCtrl"></div>
+    </worldview>
 
 </body>
 
 
-<script type="text/javascript" src="WorldView.js"></script>
-<script type="text/javascript" src="EventHandler.js"></script>
-<script type="text/javascript" src="WorldHandler.js"></script>
-<script type="text/javascript" src="GeolocationParser.js"></script>
-<script type="text/javascript" src="FigureCreator.js"></script>
+<script type="text/javascript" src="modules/WorldView.js"></script>
+<script type="text/javascript" src="modules/EventHandler.js"></script>
+<script type="text/javascript" src="modules/WorldHandler.js"></script>
+<script type="text/javascript" src="modules/GeolocationParser.js"></script>
+<script type="text/javascript" src="modules/FigureCreator.js"></script>
 <script type="text/javascript" src="modules/LoginModule.js"></script>
 </html>

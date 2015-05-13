@@ -63,22 +63,18 @@ WorldView.directive('worldview', function(){
                     }
 
                     view.renderer.render(view.scene, view.camera);
-                    requestAnimationFrame(request);
+                    window.setTimeout(requestAnimationFrame(request), (1000/60));
                 }
             }
+            $scope.animate = $scope.requestUpdate(WorldView);
+            $scope.animate();
         },
 
         /**
          * Link Behaviour
          * @param $scope
-         * @param $element
-         * @param $attri
          */
-        link: function($scope){
 
-            $scope.animate = $scope.requestUpdate($scope.WorldView);
-            $scope.animate();
-        } // Makes the directive animate the scene onto the canvas child element
     }
 });
 
@@ -88,7 +84,7 @@ WorldView.directive('worldview', function(){
 WorldView.directive('camera', function(){
     return {
         controller: function($scope, $element, WorldView){
-            WorldView.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,1 , 10000);
+            WorldView.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,1 , 1000);
             WorldView.camera.position.setZ(300);
             WorldView.scene.add(WorldView.camera);
 

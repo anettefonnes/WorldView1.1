@@ -13,14 +13,19 @@ world.factory('World', function(WorldView, FigGen){
     WorldView.scene.add(world);
 
     return{
-        radius : rad,
-        world : world
+        world: world,
+        radius: rad,
+        rotation : 0.001,
+        add: world.add,
+        rotate: function(){
+            this.world.rotation.y += this.rotation
+        }
     }
 });
 
 world.controller('WorldCtrl',['WorldView', 'World', function(WorldView, World){
     WorldView.animations.push(function () {
-        World.world.rotation.y += 0.001;
+        World.rotate();
     });
 }]);
 

@@ -18,7 +18,7 @@ FigureGenerator.factory('FigGen', function(){
         },
 
         transfer: function(){
-            return 10;
+            console.log("Transfer figure is not defined ");
         },
 
         world: function(rad, seg){
@@ -29,8 +29,7 @@ FigureGenerator.factory('FigGen', function(){
                     bumpMap:        THREE.ImageUtils.loadTexture('img/bump.jpg'),
                     bumpScale:      2,
                     specularMap:    THREE.ImageUtils.loadTexture('img/water.png'),
-                    specular:       new THREE.Color('grey'),
-                    minFilter:      THREE.NearestFilter
+                    specular:       new THREE.Color('grey')
                 })
             );
         },
