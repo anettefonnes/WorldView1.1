@@ -1,7 +1,4 @@
-/**
- * Created by h139418 on 12.05.2015.
- */
-"use strict;"
+"use strict";
 
 var FigureGenerator = angular.module('FigureGenerator', []);
 
@@ -12,7 +9,7 @@ FigureGenerator.factory('FigGen', function(){
                 color = 0xffffff
             }
             return new THREE.Mesh(
-                new THREE.SphereGeometry(0.5, 10,10),
+                new THREE.SphereGeometry(2, 10,10),
                 new THREE.MeshBasicMaterial({color: color})
             );
         },
@@ -33,6 +30,9 @@ FigureGenerator.factory('FigGen', function(){
                 })
             );
         },
+        star: function(color, size){
+            return new THREE.DirectionalLight(color, size);
+        },
         universe: function(){
             return new THREE.Mesh(
                 new THREE.SphereGeometry(1000, 300, 300),
@@ -43,3 +43,7 @@ FigureGenerator.factory('FigGen', function(){
         }
     }
 });
+
+/**
+ * Created by h139418 on 12.05.2015.
+ */

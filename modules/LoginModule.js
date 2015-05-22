@@ -1,66 +1,52 @@
-/**
- * Created by Christer on 08.05.2015.
- */
 "user strict";
-//Services and controllers connected to login
 
-var LoginModule = angular.module('Login', ['EventHandler']);
+var LoginModule = angular.module('Login', ['HubHandler']);
 
-LoginModule.factory('Token', ['Events', function (Events) {
-    return {
-        access: "",
-        connectToHub: function () {
-            var connection = $.hubConnection('http://wtnews.cloudapp.net:8080');
-            var preleadHub = connection.createHubProxy('preleadHub');
-
-            connection.qs = {Bearer: this.access};
-            connection.logging = true;
-            var i = 1;
-            preleadHub.on('onNewPrelead', function (prelead) {
-
-                console.log("has geoloc! adding event");
-                Events.add({
-                    id: i,
-                    lo: i,
-                    la: i
-                });
-                i++;
-                console.log(prelead);
-            });
-            connection.start().fail(function (err) {
-                console.log(err);
-            });
-        }
-    }; // Returns Token Object - for connecting
-}]);
-LoginModule.factory('Login', function () {
+LoginModule.factory('Login', ['$http','Hub', function ($http,Hub) {
     return {
         url: "http://wtnews.cloudapp.net:8080/idsrv/connect/token",
         username: "arnor",
         password: "H3mm3lig",
-        client_id: 'internalServerApp'
-    }
-});
-LoginModule.controller('LoginCtrl', ['$http', 'Login', 'Token', function ($http, Login, Token) {
-    console.log("Logging in with username: " + Login.username);
-    $http({
-        method: 'POST',
-        url: Login.url,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        data: 'grant_type=password' +
-        '&username=' + Login.username +
-        '&password=' + Login.password +
-        '&client_id=' + Login.client_id +
-        '&client_secret=H3mm3lig' +
-        '&scope=write'
-    }).then(function (data) {
-        Token.access = data.data.access_token;
-        if (Token.access) {
-            console.log("Login Success!");
-            Token.connectToHub();
+        client_id: 'internalServerApp',
+
+        login: function(){
+            $http({
+                method: 'POST',
+                url: this.url,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: 'grant_type=password' +
+                '&username=' + this.username +
+                '&password=' + this.password +
+                '&client_id=' + this.client_id +
+                '&client_secret=H3mm3lig' +
+                '&scope=write'
+            }).then(function (data) {
+                Hub.access = data.data.access_token;
+                if (Hub.access) {
+                    console.log("Login Success!");
+                    Hub.connectToServer();
+                }
+            });
         }
-    });
+    };
 }]);
 
+LoginModule.controller('LoginCtrl', ['$scope', 'Login', function($scope, Login){
+
+}]);
+
+LoginModule.directive('login',function(){
+    return {
+        restrict: 'E',
+        require: 'worldview',
+        controller: function($scope,$element,$attrs){
+            console.log($scope);
+        }
+    }
+});
+
+/**
+ * Created by Christer on 08.05.2015.
+ */

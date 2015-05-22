@@ -1,38 +1,31 @@
-/**
- * Created by h139418 on 12.05.2015.
- */
-"use strict;"
+"use strict";
 
-var world = angular.module('WorldHandler', ['WorldView', 'FigureGenerator']);
+var world = angular.module('WorldHandler', ['FigureGenerator', 'ViewHandler']);
 
-world.factory('World', function(WorldView, FigGen){
+world.factory('World', ['FigGen',function(FigGen){
 
     var rad = 100;
     var world = FigGen.world(rad,300);
-    world.name = "earth";
-    WorldView.scene.add(world);
+    world.name = "world";
 
     return{
-        world: world,
+        object: world,
         radius: rad,
         rotation : 0.001,
         add: world.add,
-        rotate: function(){
-            this.world.rotation.y += this.rotation
+    }
+}]);
+
+world.directive('world', function(){
+    return{
+        restric: 'A',
+        require: 'view',
+        controller: function($scope,World, View){
+
         }
     }
 });
 
-world.controller('WorldCtrl',['WorldView', 'World', function(WorldView, World){
-    WorldView.animations.push(function () {
-        World.rotate();
-    });
-}]);
-
 /**
- * TODO: Make a rotation function
- *
-    WorldView.animations.push(function () {
-        WorldView.world.rotation.y += 0.001;
-    });
+ * Created by h139418 on 12.05.2015.
  */
