@@ -1,8 +1,8 @@
 "use strict";
 
-var Star = angular.module('StarHandler', ['FigureGenerator', 'GeoParser']);
+var Star = angular.module('StarHandler', ['FigureGenerator']);
 
-Star.factory('Star', ['FigGen','GeoParser', function(FigGen,GeoParser){
+Star.factory('Star', ['FigGen', function(FigGen){
     var star = FigGen.star(0xffffff,  0.3);
     star.position.set(200,0,500);
     return {

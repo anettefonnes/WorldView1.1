@@ -2,26 +2,25 @@
 
 var world = angular.module('WorldHandler', ['FigureGenerator', 'ViewHandler']);
 
-world.factory('World', ['FigGen',function(FigGen){
-
-    var rad = 100;
-    var world = FigGen.world(rad,300);
-    world.name = "world";
-
-    return{
-        object: world,
-        radius: rad,
-        rotation : 0.001,
-        add: world.add,
-    }
-}]);
-
 world.directive('world', function(){
     return{
-        restric: 'A',
-        require: 'view',
-        controller: function($scope,World, View){
+        restrict: 'E',
+        scope: {},
+        controller: function($scope, FigGen, Model){
+            $scope.createWorld = FigGen.world;
+            $scope.model = Model;
+        },
+        link:function($scope, $element, $attrs){
+            $scope.world = $scope.createWorld($attrs.rad, $attrs.seg, $attrs.texture);
+            $scope.model.scene.add($scope.world);
+            $scope.model.world = $scope.world;
+            $scope.model.worldRadius = $attrs.rad;
 
+            if($attrs.rotation){
+                $scope.model.animations.push(function() {
+                    $scope.world.rotation.y += ($attrs.rotation / 1000);
+                })
+            }
         }
     }
 });

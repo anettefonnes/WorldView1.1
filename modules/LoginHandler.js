@@ -1,7 +1,13 @@
 "user strict";
 
-var LoginModule = angular.module('Login', ['HubHandler']);
+var LoginModule = angular.module('Login', []);
 
+LoginModule.factory('Token', function(){
+    return{
+        token: ""
+    }
+});
+/*
 LoginModule.factory('Login', ['$http','Hub', function ($http,Hub) {
     return {
         url: "http://wtnews.cloudapp.net:8080/idsrv/connect/token",
@@ -32,17 +38,35 @@ LoginModule.factory('Login', ['$http','Hub', function ($http,Hub) {
         }
     };
 }]);
-
-LoginModule.controller('LoginCtrl', ['$scope', 'Login', function($scope, Login){
-
-}]);
+*/
 
 LoginModule.directive('login',function(){
     return {
         restrict: 'E',
-        require: 'worldview',
-        controller: function($scope,$element,$attrs){
-            console.log($scope);
+        controller: function($scope, $http){
+            $scope.http = $http;
+        },
+        link: function($scope, $element, $attrs){
+            $scope.http({
+                method: 'POST',
+                url: $attrs.url,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: 'grant_type=password' +
+                '&username=' + $attrs.username +
+                '&password=' + $attrs.password +
+                '&client_id=' + 'internalServerApp' +
+                '&client_secret=H3mm3lig' +
+                '&scope=write'
+            }).then(function (data) {
+                $scope.token = data.data.access_token;
+                console.log($scope);
+                console.log($element);
+                if($scope.token){
+                    $scope.$emit('token');
+                }
+            });
         }
     }
 });

@@ -2,39 +2,54 @@
 
 var View = angular.module('ViewHandler',[]);
 
-View.factory('View',[function(){
+View.factory('Model',[function(){
     return {
-        renderer: new THREE.WebGLRenderer(),
         scene: new THREE.Scene(),
         animations: []
     }
 }]);
-
 View.factory('Camera', [function(){
+    return new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,1 , 5000)
+    
+}]);
 
-    return{
-        object: new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight,1 , 5000),
-        zoom: 300
+View.directive('camera', function(){
+    return {
+        restrict: 'A',
+        require: ['view'],
+        controller: ['$scope','Camera',function($scope, Camera){
+            $scope.camera = Camera;
+            $scope.placeCamera = function(vector, object){
+                Camera.position = vector;
+                Camera.lookAt(object);
+            };
+            $scope.updateCameraPerspective = function(width, height) {
+                Camera.aspect = (width / height);
+                Camera.updateProjectionMatrix();
+            }
+        }],
+        link: function($scope, $element, $attrs){
+            $scope.camera.position.setZ($attrs.camera);
+        }
     }
-}]);
-
-View.controller('CameraCtrl', ['$scope','Camera',function($scope, Camera){
-
-}]);
+});
 
 View.directive('view', function () {
     return {
         restrict: 'E',
 
-        controller: function ($scope, $element, Camera, View) {
+        controller: function ($scope, $element, Camera, Model) {
             //Appending the canvas to the renderer to the DOMelement
-            $element.append(View.renderer.domElement);
 
-            Camera.object.position.setZ(300);
+            $scope.renderer = new THREE.WebGLRenderer(),
+            $element.append($scope.renderer.domElement);
+
+
+
             //Renderer to fit the screen - and setting it liquid to screen
-            View.renderer.setSize(window.innerWidth, window.innerHeight);
+            $scope.renderer.setSize(window.innerWidth, window.innerHeight);
             window.addEventListener("resize", function () {
-                View.renderer.setSize((window.innerWidth), (window.innerHeight));
+                $scope.renderer.setSize((window.innerWidth), (window.innerHeight));
             }, false);
 
             var requestUpdate = function (view,camera) {  // Adds the scene model "WorldView" to the animation loop
@@ -44,17 +59,16 @@ View.directive('view', function () {
                         view.animations[i]();
                     }
 
-                    view.renderer.render(view.scene, camera.object);
+                    $scope.renderer.render(view.scene, camera);
                     window.setTimeout(requestAnimationFrame(request), (1000/60));
                 }
             }
 
-            $scope.animate = requestUpdate(View, Camera);
+            $scope.animate = requestUpdate(Model, Camera);
             $scope.animate();
         }
     }
 });
-
 
 /**
  * Created by Christer on 14.05.2015.

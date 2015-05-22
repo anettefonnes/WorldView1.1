@@ -12,23 +12,49 @@
 <script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 
 <body  ng-app="WorldView">
+
     <worldview>
-        <view></view>
+        <login url="http://wtnews.cloudapp.net:8080/idsrv/connect/token" username="arnor" password="H3mm3lig">
+
+
+
+        <view camera="300" >
+
+        </view>
+
+        <world rad="100" seg="300" rotation="1" texture="img/earth.jpg"></world>
+
+        <events color="0x0000ff" size="2">
+            <hub url="http://wtnews.cloudapp.net:8080"></hub>
+        </events>
+
+        </login>
+<!--
+        <space texture="" light=""></space>
+
+        <star></star>
+
+        <event>
+            <hub></hub>
+        </event>
+        <transfer>
+            <hub server="" name=""></hub>
+        </transfer> -->
+
     </worldview>
 
 </body>
 
 
-<script type="text/javascript" src="modules/WorldView1.0.js"></script>
+<script type="text/javascript" src="modules/WorldView.js"></script>
 <script type="text/javascript" src="modules/FigureGenerator.js"></script>
 <script type="text/javascript" src="modules/GeolocationParser.js"></script>
 <script type="text/javascript" src="modules/ViewHandler.js"></script>
-<script type="text/javascript" src="modules/CameraHandler.js"></script>
 <script type="text/javascript" src="modules/WorldHandler.js"></script>
+<script type="text/javascript" src="modules/EventHandler.js"></script>
 <script type="text/javascript" src="modules/StarHandler.js"></script>
 <script type="text/javascript" src="modules/SpaceHandler.js"></script>
-<script type="text/javascript" src="modules/EventHandler.js"></script>
-<script type="text/javascript" src="modules/LoginModule.js"></script>
+<script type="text/javascript" src="modules/LoginHandler.js"></script>
 <script type="text/javascript" src="modules/HubHandler.js"></script>
 
 </html>

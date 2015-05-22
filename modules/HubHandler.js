@@ -1,6 +1,12 @@
 "use strict";
 
 var HubHandler = angular.module('HubHandler',[]);
+/*
+HubHandler.factory('Token', function(){
+   return{
+       token: ""
+   }
+});
 
 HubHandler.factory('Hub', function (){
     return {
@@ -8,8 +14,7 @@ HubHandler.factory('Hub', function (){
         list: {},
         //connection: $.hubConnection('http://wtnews.cloudapp.net:8080'),
         connectToServer: function(){
-            this.connection.qs = {Bearer: this.access};
-            this.connection.logging = true;
+
             this.connection.start().fail(function (err) {
                 console.log(err);
             });
@@ -19,19 +24,28 @@ HubHandler.factory('Hub', function (){
         }
     };
 });
+*/
 
 HubHandler.directive('hub',function(){
     return {
         restrict: 'E',
-        controller: function($scope, Hub){
-            Hub.connection = $.hubConnection('http://wtnews.cloudapp.net:8080');
+        controller: function($scope){
+            $scope.$on('token', function(){
+                $scope.hubServer.qs = {Bearer: $scope.token};
+                $scope.hubServer.logging = true;
+                $scope.hubServer.start().fail(function (err) {
+                    console.log(err);
+                });
+            });
+
+        },
+        link:function($scope, $element, $attrs){
+            $scope.hubServer = $.hubConnection($attrs.url);
+
+            $scope.$on('hub', )
         }
     }
 });
-
-HubHandler.controller('HubCtrl', ['$scope', 'Hub', function($scope, Hub){
-    $scope.Hub = Hub;
-}]);
 
 /**
  * Created by Christer on 18.05.2015.

@@ -4,12 +4,12 @@ var FigureGenerator = angular.module('FigureGenerator', []);
 
 FigureGenerator.factory('FigGen', function(){
     return {
-        event: function(color){
-            if(color === undefined){
+        event: function(size, color){
+            if(!color){
                 color = 0xffffff
             }
             return new THREE.Mesh(
-                new THREE.SphereGeometry(2, 10,10),
+                new THREE.SphereGeometry(size, 10,10),
                 new THREE.MeshBasicMaterial({color: color})
             );
         },
@@ -18,11 +18,11 @@ FigureGenerator.factory('FigGen', function(){
             console.log("Transfer figure is not defined ");
         },
 
-        world: function(rad, seg){
+        world: function(rad, seg, texture){
             return new THREE.Mesh(
                 new THREE.SphereGeometry(rad, seg, seg),
                 new THREE.MeshPhongMaterial({
-                    map:            THREE.ImageUtils.loadTexture('img/earth.jpg'),
+                    map:            THREE.ImageUtils.loadTexture(texture),
                     bumpMap:        THREE.ImageUtils.loadTexture('img/bump.jpg'),
                     bumpScale:      2,
                     specularMap:    THREE.ImageUtils.loadTexture('img/water.png'),
