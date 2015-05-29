@@ -42,7 +42,7 @@ HubHandler.directive('hub',function(){
         link:function($scope, $element, $attrs){
             $scope.hubServer = $.hubConnection($attrs.url);
 
-            $scope.$on('hub', )
+            $scope.$on('hub', functionm)
         }
     }
 });

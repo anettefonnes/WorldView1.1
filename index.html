@@ -9,39 +9,35 @@
 <script type="text/javascript" src="bower_components/threejs/build/three.min.js"></script>
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/signalr/jquery.signalR.min.js"></script>
-<script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 
-<body  ng-app="WorldView">
+<body ng-app="WorldView">
 
-    <worldview>
-        <login url="http://wtnews.cloudapp.net:8080/idsrv/connect/token" username="arnor" password="H3mm3lig">
+<worldview>
 
-
-
-        <view camera="300" >
+        <view camera="300">
 
         </view>
 
         <world rad="100" seg="300" rotation="1" texture="img/earth.jpg"></world>
 
-        <events color="0x0000ff" size="2">
-            <hub url="http://wtnews.cloudapp.net:8080"></hub>
-        </events>
+        <events color="0x0000ff" size="2"></events>
+        <transfer color="0xffffff" particlecolor="0xff0000" completecolor="0x00ff00" ></transfer>
 
-        </login>
-<!--
-        <space texture="" light=""></space>
 
-        <star></star>
 
-        <event>
-            <hub></hub>
-        </event>
-        <transfer>
-            <hub server="" name=""></hub>
-        </transfer> -->
+    <!--
+            <space texture="" light=""></space>
 
-    </worldview>
+            <star></star>
+
+            <event>
+                <hub></hub>
+            </event>
+            <transfer>
+                <hub server="" name=""></hub>
+            </transfer> -->
+
+</worldview>
 
 </body>
 
