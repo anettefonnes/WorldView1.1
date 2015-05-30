@@ -14,7 +14,7 @@ Star.directive('star', function(){
         link: function($scope, $element, $attrs){
             $scope.model.star = $scope.createStar(parseInt($attrs.color), $attrs.size);
             $scope.vector = $scope.vector($attrs.range);
-            $scope.model.star.position.copy($scope.vector(10,-90));
+            $scope.model.star.position.copy($scope.vector(10,70));
             $scope.model.scene.add($scope.model.star);
         }
     }

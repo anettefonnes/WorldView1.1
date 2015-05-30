@@ -15,19 +15,67 @@ Event.directive('event', function (FigGen, Model) {
 
 
         },
+
+        //TODO - When hub sends event.id, activate check for exisiting event
         link: function ($scope, $element, $attrs) {
             $scope.createEvent = function (event) {
-                if (event.geolocation) {
-                    if (event.geolocation.hasValue) {
-                        event.Mesh = FigGen.event($attrs.size, $attrs.color);
-                        event.Mesh.position.copy($scope.vector(event.geolocation.latitude, event.geolocation.longitude));
-                        Model.world.add(event.Mesh);
-                        $scope.list[event.id] = event;
+                //if(!$scope.list[event.id]) {
+                    $scope.size = parseInt($attrs.size) / 100;
+                    if (event.geolocation) {
+                        if (event.geolocation.hasValue) {
+                            event.mesh = FigGen.event($scope.size, $attrs.color);
+                            if ($attrs.glow) {
+                                event.mesh.add(FigGen.eventGlow(($scope.size + 0.5), $attrs.glow, ($attrs.opacity ? $attrs.opacity : 50)));
+                            }
+                            event.mesh.position.copy($scope.vector(event.geolocation.latitude, event.geolocation.longitude));
+                            Model.world.add(event.mesh);
+                            $scope.list[event.id] = event;
+                        }
+                    }
+                /*}
+                else{
+                    console.error("Event " + event.id + " already exist - use update or delete event first!");
+                }*/
+            };
+
+            $scope.updateEvent = function(event){
+                if($scope.list[event.id]){
+                    if (event.geolocation && event.geolocation.hasValue) {
+                        $scope.list[event.id].mesh.position.copy($scope.vector(event.geolocation.latitude, event.geolocation.longitude));
+                    }
+                    else{
+                        console.log("Event " + event.id + " has nothing to update");
                     }
                 }
+                else{
+                    console.error("Event " + event.id + " does not exist, u need to create it first!");
+                }
             };
+
+
+            //TODO needs to be tested for memory leaks
+            $scope.deleteEvent = function (event) {
+                if ($scope.list[event.id]) {
+                    Model.world.getObjectById($scope.list[event.id].mesh.id).geometry.dispose();
+                    Model.world.getObjectById($scope.list[event.id].mesh.id).material.dispose();
+                    Model.world.remove(Model.world.getObjectById($scope.list[event.id].mesh.id));
+                    $scope.list[event.id].mesh.material.dispose();
+                    $scope.list[event.id].mesh.geometry.dispose();
+                    $scope.list[event.id] = null;
+                    delete $scope.list[event.id];
+
+                }
+            };
+
+
             $scope.$root.$on($attrs.addevent, function (value, prelead) {
                 $scope.createEvent(prelead);
+            });
+            $scope.$root.$on($attrs.deleteevent, function (value, prelead) {
+                $scope.deleteEvent(prelead);
+            });
+            $scope.$root.$on($attrs.updateevent, function (value, prelead) {
+                $scope.updateEvent(prelead);
             });
         }
     }
@@ -89,6 +137,7 @@ Event.directive('transfer', function (FigGen, Model) {
                 }
             };
 
+            // TODO - complete this without fuckups =)
             $scope.updateTransfer = function (event) {
                 if ($scope.list[event.id]) {
                     if (event.progress != $scope.list[event.id].progress && event.progress >= 0 && event.progress <= 100) {
@@ -99,21 +148,26 @@ Event.directive('transfer', function (FigGen, Model) {
                 }
             };
 
-            //        $scope.$root.$on($attrs.addTransfer, $scope.createTransfer(data, transferEvent));
-            $scope.createTransfer({
-                id: 'afganTobergen',
-                progress: 50,
-                fromGeolocation: {
-                    hasValue: true,
-                    latitude: 34,
-                    longitude: 38
-                },
-                toGeolocation: {
-                    hasValue: true,
-                    latitude: 60,
-                    longitude: 5
+            //TODO - Define this
+            $scope.deleteTransfer = function (event) {
+                if ($scope.list[event.id]) {
+                    //delete
                 }
+            };
+
+
+
+            $scope.$root.$on($attrs.addtransfer, function (value, transfer) {
+                $scope.deleteEvent(transfer);
             });
+            $scope.$root.$on($attrs.updateevent, function (value, transfer) {
+                $scope.deleteEvent(transfer);
+            });
+            $scope.$root.$on($attrs.deletetransfer, function (value, transfer) {
+                $scope.deleteEvent(transfer);
+            });
+
+
             $scope.createTransfer({
                 id: 'madridvsbarcelona',
                 progress: 0,

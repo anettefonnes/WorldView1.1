@@ -13,6 +13,16 @@ FigureGenerator.factory('FigGen', function () {
         return color;
     }
 
+    function prefixOpacity(opacity) {
+        if (!opacity) {
+            opacity = 50
+        }
+        if (typeof color == "string") {
+            opacity = parseInt(color);
+        }
+        return (opacity / 100);
+    }
+
     return {
         event: function (size, color) {
             color = prefixColor(color);
@@ -21,7 +31,18 @@ FigureGenerator.factory('FigGen', function () {
                 new THREE.MeshBasicMaterial({color: color})
             );
         },
-
+        eventGlow: function (size, color, opacity) {
+            opacity = prefixOpacity(opacity);
+            color = prefixColor(color);
+            return new THREE.Mesh(
+                new THREE.SphereGeometry(size, 10, 10),
+                new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: opacity
+                })
+            )
+        },
         transfer: function (color, splineA, splineB) {
             color = prefixColor(color);
             var mesh = new THREE.Mesh(
@@ -41,11 +62,21 @@ FigureGenerator.factory('FigGen', function () {
                     color: color,
                     size: 50,
                     map: THREE.ImageUtils.loadTexture("img/map_mask.png"),
-                    blending: THREE.AdditiveBlending,
+                    blending: THREE.NormalBlending,
                     transparent: true
                 })
             );
         },
+        clouds: function (rad, seg, texture) {
+            return new THREE.Mesh(
+                new THREE.SphereGeometry((rad + 0.2), seg, seg),
+                new THREE.MeshPhongMaterial({
+                    map: THREE.ImageUtils.loadTexture(texture), //
+                    transparent: true
+                })
+            );
+        },
+
 
         world: function (rad, seg, texture) {
             return new THREE.Mesh(
@@ -59,15 +90,20 @@ FigureGenerator.factory('FigGen', function () {
                 })
             );
         },
+
         star: function (color, size) {
-            return new THREE.DirectionalLight(color, size);
+            return new THREE.DirectionalLight(color, size).add(new THREE.Mesh(
+                new THREE.SphereGeometry(size*10, 250, 250),
+                new THREE.MeshBasicMaterial({color: color})));
         },
         universe: function (rad, seg, texture) {
             return new THREE.Mesh(
                 new THREE.SphereGeometry(rad, seg, seg),
                 new THREE.MeshBasicMaterial({
                     map: THREE.ImageUtils.loadTexture(texture), // 'img/stars.png'
-                    side: THREE.BackSide
+                    side: THREE.BackSide,
+                    opacity: 0.4,
+                    transparent: true
                 })
             );
         }

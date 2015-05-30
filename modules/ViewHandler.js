@@ -17,6 +17,8 @@ View.directive('camera', function(Camera){
     return {
         link: function($scope, $element, $attrs){
             Camera.position.setZ($attrs.camera);
+            Camera.position.setY(50);
+            Camera.lookAt(new THREE.Vector3(0,0,0));
         }
     }
 });
