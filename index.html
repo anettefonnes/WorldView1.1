@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>World View</title>
+    <link rel="stylesheet" type="text/css" href="wtn.css"/>
     <link rel="stylesheet" type="text/css" href="WorldViewStyle.css">
 </head>
 <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
@@ -12,6 +13,20 @@
 <script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 <body ng-app="WorldView">
 
+<header id="mainHeader" class="mainHeader">
+    <h1 class="mainHeader_logo"> Wolftech News </h1>
+
+    <h2 class="mainHeader_clock " title="Thursday, April 23, 2015">World View</h2><h3 class="mainHeader_clock down">johiev</h3>
+<h2 class="mainHeader_clock"> </h2>
+    <div class="mainHeader_user"><a href="/user" class="mainHeader_user_link">
+
+        <h3 class="mainHeader_user_name">
+            Signed in as
+            <span class=""> Ola Normann </span></h3></a><a ng-click="" class="mainHeader_user_signout" href="/"title="Sign out of Wolftech News">
+        Sign out
+    </a></div>
+</header>
+
 <worldview>
 
     <login login="HubConnection" username="arnor" password="H3mm3lig" url="http://wtnews.cloudapp.net:8080/idsrv/connect/token">
@@ -20,10 +35,10 @@
         </hubconnection>
     </login>
 
-    <view camera="300">  loading...  </view>
+    <view camera="300">    </view>
 
     <space size="1000" rotation="0.2" segments="200" texture="img/stars2.jpg" light="0x606060"></space>
-    <star color="0xF0F0F0" range="1000" size="1" ></star>
+    <star color="0xD0D0D0" range="1000" size="1" ></star>
     <world rad="100" seg="300" rotation="1" texture="img/earth.jpg" clouds="img/fair_clouds.png"></world>
 
     <event color="0x00CCFF" size="20" glow="0x00EEFF" opacity="20" addEvent="onNewPrelead"></event>
