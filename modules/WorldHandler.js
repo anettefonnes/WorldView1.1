@@ -11,14 +11,13 @@ world.directive('world', function(){
             $scope.model = Model;
         },
         link:function($scope, $element, $attrs){
-            $scope.world = $scope.createWorld($attrs.rad, $attrs.seg, $attrs.texture);
-            $scope.model.scene.add($scope.world);
-            $scope.model.world = $scope.world;
+            $scope.model.world = $scope.createWorld($attrs.rad, $attrs.seg, $attrs.texture);
+            $scope.model.scene.add($scope.model.world);
             $scope.model.worldRadius = $attrs.rad;
 
             if($attrs.rotation){
                 $scope.model.animations.push(function() {
-                    $scope.world.rotation.y += ($attrs.rotation / 1000);
+                    $scope.model.world.rotation.y += ($attrs.rotation / 1000);
                 })
             }
         }

@@ -6,14 +6,9 @@ var WorldView = angular.module('WorldView', ['ViewHandler','WorldHandler','StarH
 
 WorldView.directive('worldview', function(){
     return {
-        scope:{},
         restrict: 'E',
+        controller: function(){
 
-        controller: function($scope,Star,Space, Model){
-
-            Model.scene.add( Star.object );
-            Model.scene.add( Space.object );
-            Model.scene.add( Space.light );
 
 
             /*

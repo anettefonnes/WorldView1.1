@@ -9,33 +9,26 @@
 <script type="text/javascript" src="bower_components/threejs/build/three.min.js"></script>
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="bower_components/signalr/jquery.signalR.min.js"></script>
-
+<script type="text/javascript" src="http://wtnews.cloudapp.net:8080/signalr/hubs"></script>
 <body ng-app="WorldView">
 
 <worldview>
 
-        <view camera="300">
+    <login login="HubConnection" username="arnor" password="H3mm3lig" url="http://wtnews.cloudapp.net:8080/idsrv/connect/token">
+        <hubconnection connection="wtnews" login="HubConnection" url="http://wtnews.cloudapp.net:8080">
+            <hub connection="wtnews" name="preleadHub" addEvent="onNewPrelead"></hub>
+        </hubconnection>
+    </login>
 
-        </view>
+    <view camera="300">  loading...  </view>
 
-        <world rad="100" seg="300" rotation="1" texture="img/earth.jpg"></world>
+    <space size="1000" rotation="0.2" segments="200" texture="img/stars.png" light="0x909090"></space>
+    <star color="0xffffff" range="1000" size="0.3" ></star>
+    <world rad="100" seg="300" rotation="1" texture="img/earth.jpg"></world>
 
-        <events color="0x0000ff" size="2"></events>
-        <transfer color="0xffffff" particlecolor="0xff0000" completecolor="0x00ff00" ></transfer>
+    <event color="0x00CCFF" size="1" addEvent="onNewPrelead"></event>
+    <transfer color="0x0033CC" particlecolor="0xff0000" completecolor="0x0000ff"></transfer>
 
-
-
-    <!--
-            <space texture="" light=""></space>
-
-            <star></star>
-
-            <event>
-                <hub></hub>
-            </event>
-            <transfer>
-                <hub server="" name=""></hub>
-            </transfer> -->
 
 </worldview>
 
@@ -50,7 +43,7 @@
 <script type="text/javascript" src="modules/EventHandler.js"></script>
 <script type="text/javascript" src="modules/StarHandler.js"></script>
 <script type="text/javascript" src="modules/SpaceHandler.js"></script>
-<script type="text/javascript" src="modules/LoginHandler.js"></script>
 <script type="text/javascript" src="modules/HubHandler.js"></script>
+<script type="text/javascript" src="modules/LoginHandler.js"></script>
 
 </html>

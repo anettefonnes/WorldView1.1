@@ -17,16 +17,18 @@ Event.directive('event', function (FigGen, Model) {
         },
         link: function ($scope, $element, $attrs) {
             $scope.createEvent = function (event) {
-                if (event.geolocation.hasValue) {
-                    event.Mesh = FigGen.event($attrs.size, $attrs.color);
-                    event.Mesh.position.copy($scope.vector(event.geolocation.latitude, event.geolocation.longitude));
-                    Model.world.add(event.Mesh);
-                    $scope.list[event.id] = event;
+                if (event.geolocation) {
+                    if (event.geolocation.hasValue) {
+                        event.Mesh = FigGen.event($attrs.size, $attrs.color);
+                        event.Mesh.position.copy($scope.vector(event.geolocation.latitude, event.geolocation.longitude));
+                        Model.world.add(event.Mesh);
+                        $scope.list[event.id] = event;
+                    }
                 }
             };
-
-            $scope.createEvent({/* Defined Point event */});
-
+            $scope.$root.$on($attrs.addevent, function (value, prelead) {
+                $scope.createEvent(prelead);
+            });
         }
     }
 });
@@ -67,7 +69,6 @@ Event.directive('transfer', function (FigGen, Model) {
                     Model.world.add(event.mesh);
 
 
-
                     // Particle - computes the position, and adds the
                     if (!event.progress) {
                         event.progress = 0;
@@ -77,42 +78,10 @@ Event.directive('transfer', function (FigGen, Model) {
                     event.particleGeometry.vertices.push(event.points[event.progress].clone());
 
 
-
                     event.particle = FigGen.particle($attrs.particlecolor, event.particleGeometry);
                     event.particle.sortParticles = true;
                     event.particle.dynamic = true;
 
-
-                    /*                     event.particleVec = {};
-                     event.particleVec.current = event.progress;
-                     event.particleVec.to = event.progress;
-                     event.particleVec.nextIndex = event.progress + 1;
-                     event.particleVec.lerpN = 0;
-                     event.particleVec.path = event.points;
-                     event.particle.geometry.vertices[0].update = function (progress) {
-                     this.lerpN += 0.05;
-                     if (this.lerpN > 1) {
-                     this.lerpN = 0;
-                     this.current = this.nextIndex;
-                     this.nextIndex++;
-                     this.position.x = particle.x;
-                     obj.position.y = particle.y;
-                     obj.position.z = particle.z;            //When particle is at the end of the path, change the linecolor to green. (first iteration only)
-                     if (particle.nextIndex >= progress) {
-                     particle.moveIndex = 0;
-                     particle.nextIndex = 1;
-                     line.material.color = new THREE.Color(0, 255, 0);
-                     line.material.colorsNeedUpdate = true;
-                     }
-                     };
-
-                     var currentPoint = path[particle.moveIndex];
-                     var nextPoint = path[particle.nextIndex];
-                     particle.copy(currentPoint);
-                     particle.lerp(nextPoint, particle.lerpN);
-
-                     this.geometry.verticesNeedUpdate = true;
-                     */
                     event.mesh.add(event.particle);
                     $scope.list[event.id] = event;
 
@@ -121,7 +90,7 @@ Event.directive('transfer', function (FigGen, Model) {
             };
 
             $scope.updateTransfer = function (event) {
-                if($scope.list[event.id]){
+                if ($scope.list[event.id]) {
                     if (event.progress != $scope.list[event.id].progress && event.progress >= 0 && event.progress <= 100) {
                         $scope.list[event.id].particle.geometry.vertices[0] = $scope.list[event.id].points[event.progress];
                         $scope.list[event.id].particle.geometry.verticesNeedUpdate = true;
@@ -130,41 +99,44 @@ Event.directive('transfer', function (FigGen, Model) {
                 }
             };
 
-    //        $scope.$root.$on($attrs.addTransfer, $scope.createTransfer(data, transferEvent));
+            //        $scope.$root.$on($attrs.addTransfer, $scope.createTransfer(data, transferEvent));
             $scope.createTransfer({
-                id: 'Test1',
+                id: 'afganTobergen',
                 progress: 50,
                 fromGeolocation: {
                     hasValue: true,
-                    latitude: 60,
-                    longitude: -90
+                    latitude: 34,
+                    longitude: 38
                 },
                 toGeolocation: {
                     hasValue: true,
-                    latitude: 0,
-                    longitude: -90
+                    latitude: 60,
+                    longitude: 5
                 }
             });
             $scope.createTransfer({
-                id: 'Test2',
+                id: 'madridvsbarcelona',
                 progress: 0,
                 fromGeolocation: {
                     hasValue: true,
-                    latitude: 60,
-                    longitude: -90
+                    latitude: 40,
+                    longitude: -3
                 },
                 toGeolocation: {
                     hasValue: true,
-                    latitude: 90,
-                    longitude: -90
+                    latitude: 60,
+                    longitude: 5
                 }
             });
 
             $scope.num = 0;
             $scope.test = function () {
                 $scope.num++;
+                if($scope.num == 110){
+                    $scope.num = 0;
+                }
                 $scope.updateTransfer({
-                    id: 'Test2',
+                    id: 'madridvsbarcelona',
                     progress: $scope.num
                 })
             };

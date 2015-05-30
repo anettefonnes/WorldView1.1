@@ -13,23 +13,10 @@ View.factory('Camera', [function(){
     
 }]);
 
-View.directive('camera', function(){
+View.directive('camera', function(Camera){
     return {
-        restrict: 'A',
-        require: ['view'],
-        controller: ['$scope','Camera',function($scope, Camera){
-            $scope.camera = Camera;
-            $scope.placeCamera = function(vector, object){
-                Camera.position = vector;
-                Camera.lookAt(object);
-            };
-            $scope.updateCameraPerspective = function(width, height) {
-                Camera.aspect = (width / height);
-                Camera.updateProjectionMatrix();
-            }
-        }],
         link: function($scope, $element, $attrs){
-            $scope.camera.position.setZ($attrs.camera);
+            Camera.position.setZ($attrs.camera);
         }
     }
 });
@@ -37,22 +24,25 @@ View.directive('camera', function(){
 View.directive('view', function () {
     return {
         restrict: 'E',
-
+        scope: {},
         controller: function ($scope, $element, Camera, Model) {
+
             //Appending the canvas to the renderer to the DOMelement
 
             $scope.renderer = new THREE.WebGLRenderer(),
             $element.append($scope.renderer.domElement);
 
-
-
             //Renderer to fit the screen - and setting it liquid to screen
             $scope.renderer.setSize(window.innerWidth, window.innerHeight);
             window.addEventListener("resize", function () {
                 $scope.renderer.setSize((window.innerWidth), (window.innerHeight));
+                Camera.aspect = window.innerWidth / window.innerHeight;
+                Camera.updateProjectionMatrix();
             }, false);
 
-            var requestUpdate = function (view,camera) {  // Adds the scene model "WorldView" to the animation loop
+
+            function requestUpdate(view,camera) {
+
                 return function request() {
 
                     for(var i = 0; i < view.animations.length; i++){
@@ -60,7 +50,7 @@ View.directive('view', function () {
                     }
 
                     $scope.renderer.render(view.scene, camera);
-                    window.setTimeout(requestAnimationFrame(request), (1000/60));
+                    window.setTimeout(function(){requestAnimationFrame(request);}, (1000/60));
                 }
             }
 
