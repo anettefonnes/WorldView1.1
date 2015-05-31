@@ -54,10 +54,10 @@ FigureGenerator.factory('FigGen', function () {
             return mesh;
         },
 
-        particle: function (color, geom) {
+        particle: function (color) {
             color = prefixColor(color);
             return new THREE.PointCloud(
-                geom,
+                new THREE.Geometry(),
                 new THREE.PointCloudMaterial({
                     color: color,
                     size: 50,

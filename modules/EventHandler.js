@@ -116,23 +116,25 @@ Event.directive('transfer', function (FigGen, Model) {
                     event.mesh = FigGen.transfer($attrs.color, event.splineA, event.splineB);
                     Model.world.add(event.mesh);
 
+                    //Remove splineA and splineB from events
+                    delete event.splineA;
+                    delete event.splineB;
+                    delete event.anchors;
+
 
                     // Particle - computes the position, and adds the
                     if (!event.progress) {
                         event.progress = 0;
                     }
-                    event.particleGeometry = new THREE.Geometry();
-
-                    event.particleGeometry.vertices.push(event.points[event.progress].clone());
 
 
-                    event.particle = FigGen.particle($attrs.particlecolor, event.particleGeometry);
+                    event.particle = FigGen.particle($attrs.particlecolor);
+                    event.particle.geometry.vertices.push(event.points[event.progress].clone());
                     event.particle.sortParticles = true;
                     event.particle.dynamic = true;
 
                     event.mesh.add(event.particle);
                     $scope.list[event.id] = event;
-
 
                 }
             };
@@ -151,7 +153,14 @@ Event.directive('transfer', function (FigGen, Model) {
             //TODO - Define this
             $scope.deleteTransfer = function (event) {
                 if ($scope.list[event.id]) {
-                    //delete
+                    Model.world.remove($scope.list[event.id].mesh);
+                    for(var child in $scope.list[event.id].mesh.children){
+                        $scope.list[event.id].mesh.children[Number(child)].material.dispose();
+                        $scope.list[event.id].mesh.children[Number(child)].geometry.dispose();
+                    }
+                    $scope.list[event.id].mesh.material.dispose();
+                    $scope.list[event.id].mesh.geometry.dispose();
+                    delete $scope.list[event.id];
                 }
             };
 
@@ -194,7 +203,15 @@ Event.directive('transfer', function (FigGen, Model) {
                     progress: $scope.num
                 })
             };
+
+            $scope.testDelete = function(){
+                $scope.deleteTransfer({
+                    id: 'madridvsbarcelona'
+                });
+            }
             window.setInterval($scope.test, 100);
+
+            window.setTimeout($scope.testDelete, 0);
         }
     }
 });
